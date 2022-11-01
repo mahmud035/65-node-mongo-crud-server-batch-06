@@ -38,6 +38,17 @@ dbConnect();
 
 const userCollections = client.db('nodeMongoCrud').collection('users');
 
+app.get('/users', async (req, res) => {
+  try {
+    const query = {};
+    const cursor = userCollections.find(query);
+    const users = await cursor.toArray();
+    res.send(users);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 app.post('/users', async (req, res) => {
   try {
     const user = req.body;
