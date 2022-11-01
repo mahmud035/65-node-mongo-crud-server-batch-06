@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('colors');
 const app = express();
 const Port = process.env.PORT || 5000;
@@ -53,6 +53,18 @@ app.post('/users', async (req, res) => {
   try {
     const user = req.body;
     const result = await userCollections.insertOne(user);
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+app.delete('/users/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await userCollections.deleteOne(query);
     console.log(result);
     res.send(result);
   } catch (error) {
