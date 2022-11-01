@@ -9,12 +9,17 @@ const Port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Hello from node mongo crud server');
+});
+
 // mongodb atlas
 // username: dbuser2
 // password: YNvMylTHa8A0Yx4N
 
 const uri =
   'mongodb+srv://dbuser2:YNvMylTHa8A0Yx4N@cluster0.yeflywl.mongodb.net/?retryWrites=true&w=majority';
+
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -23,23 +28,25 @@ const client = new MongoClient(uri, {
 
 const dbConnect = async () => {
   try {
-    const userCollections = client.db('nodeMongoCrud').collection('users');
-
-    const user = {
-      name: 'Akhi',
-      email: 'akhi@example.com',
-    };
-
-    const result = await userCollections.insertOne(user);
-    console.log(result);
+    await client.connect();
+    console.log('Database connected'.yellow.italic);
   } catch (error) {
     console.log(error.name.bgRed, error.message.bold);
   }
 };
 dbConnect();
 
-app.get('/', (req, res) => {
-  res.send('Hello from node mongo crud server');
+const userCollections = client.db('nodeMongoCrud').collection('users');
+
+app.post('/users', async (req, res) => {
+  try {
+    const user = req.body;
+    const result = await userCollections.insertOne(user);
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 app.listen(Port, () => {
