@@ -49,17 +49,6 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.post('/users', async (req, res) => {
-  try {
-    const user = req.body;
-    const result = await userCollections.insertOne(user);
-    console.log(result);
-    res.send(result);
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-
 app.get('/users/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -67,6 +56,17 @@ app.get('/users/:id', async (req, res) => {
     const user = await userCollections.findOne(query);
     console.log(user);
     res.send(user);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+app.post('/users', async (req, res) => {
+  try {
+    const user = req.body;
+    const result = await userCollections.insertOne(user);
+    console.log(result);
+    res.send(result);
   } catch (error) {
     console.log(error.message);
   }
