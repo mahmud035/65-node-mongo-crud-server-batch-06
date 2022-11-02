@@ -72,6 +72,26 @@ app.post('/users', async (req, res) => {
   }
 });
 
+app.put('/users/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const filter = { _id: ObjectId(id) };
+    const user = req.body;
+    const option = { upsert: true };
+    const updatedUser = {
+      $set: {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      },
+    };
+    const result = await userCollections.updateOne(filter, updatedUser, option);
+    res.send(result);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 app.delete('/users/:id', async (req, res) => {
   try {
     const id = req.params.id;
