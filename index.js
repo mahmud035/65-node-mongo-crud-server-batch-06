@@ -60,12 +60,24 @@ app.post('/users', async (req, res) => {
   }
 });
 
+app.get('/users/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const user = await userCollections.findOne(query);
+    console.log(user);
+    res.send(user);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 app.delete('/users/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const query = { _id: ObjectId(id) };
     const result = await userCollections.deleteOne(query);
-    console.log(result);
+    // console.log(result);
     res.send(result);
   } catch (error) {
     console.log(error.message);
